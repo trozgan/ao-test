@@ -94,7 +94,7 @@
     "recordedAt": "2026-08-26T16:05:04.801Z"
   },
   "created": "2026-08-26T15:50:56.865Z",
-  "updated": "2026-08-26T16:05:12.255Z",
+  "updated": "2026-08-26T16:05:16.141Z",
   "pipeline": {
     "issueId": "AOT-2",
     "reviewStatus": "pending",
@@ -103,7 +103,7 @@
     "mergeStatus": "pending",
     "releaseStatus": "pending",
     "readyForMerge": false,
-    "updatedAt": "2026-08-26T16:05:10.371Z",
+    "updatedAt": "2026-08-26T16:05:12.081Z",
     "prUrl": "https://github.com/trozgan/ao-test/pull/3",
     "reviewRequestedAt": "2026-08-26T16:05:08.138Z",
     "scopeDrift": {
@@ -185,7 +185,7 @@
       },
       "costAtCloseOut": {
         "usd": 2.842686,
-        "pricingAsOf": "2026-08-26T16:05:10.433Z"
+        "pricingAsOf": "2026-08-26T16:05:16.140Z"
       }
     },
     "merges": [
