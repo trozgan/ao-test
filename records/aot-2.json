@@ -3,7 +3,7 @@
   "schemaVersion": 2,
   "feedback": [],
   "created": "2026-08-26T15:50:56.865Z",
-  "updated": "2026-08-26T15:50:56.922Z",
+  "updated": "2026-08-26T15:51:51.310Z",
   "pipeline": {
     "issueId": "AOT-2",
     "reviewStatus": "pending",
@@ -27,5 +27,12 @@
     "ranOn": "Sipkovszki-MacBook-Pro-2.local"
   },
   "harness": "claude-code",
-  "model": "claude-sonnet-5"
+  "model": "claude-sonnet-5",
+  "sessionHistory": [
+    {
+      "reason": "resume",
+      "agentModel": "claude-sonnet-5",
+      "timestamp": "2026-08-26T15:51:51.310Z"
+    }
+  ]
 }
