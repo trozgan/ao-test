@@ -96,20 +96,21 @@
     "recordedAt": "2026-08-26T16:05:04.801Z"
   },
   "created": "2026-08-26T15:50:56.865Z",
-  "updated": "2026-08-26T16:06:40.524Z",
+  "updated": "2026-08-26T16:06:41.954Z",
   "pipeline": {
     "issueId": "AOT-2",
-    "reviewStatus": "pending",
+    "reviewStatus": "reviewing",
     "testStatus": "pending",
     "verificationStatus": "skipped",
     "mergeStatus": "pending",
     "releaseStatus": "pending",
     "readyForMerge": false,
-    "updatedAt": "2026-08-26T16:06:39.242Z",
+    "updatedAt": "2026-08-26T16:06:40.541Z",
     "reviewNotes": "Verification failed at test — fix and resubmit",
     "verificationNotes": "Verification FAILED at test (4022ms).\n\nFull gate output: /Users/sipkovszkirobert/Projects/ao-test/workspaces/feature-aot-2/.overdeck/verification-latest.json",
     "prUrl": "https://github.com/trozgan/ao-test/pull/3",
     "reviewRequestedAt": "2026-08-26T16:05:08.138Z",
+    "reviewSpawnedAt": "2026-08-26T16:06:40.541Z",
     "scopeDrift": {
       "outsideDeclaredScope": [
         ".gitignore",
@@ -172,24 +173,24 @@
       "byStage": {
         "work": {
           "anthropic/claude-sonnet-5": {
-            "input": 184,
-            "output": 25644,
-            "cacheRead": 13026041,
-            "cacheWrite": 321024
+            "input": 186,
+            "output": 25824,
+            "cacheRead": 13063438,
+            "cacheWrite": 460362
           }
         }
       },
       "totals": {
         "anthropic/claude-sonnet-5": {
-          "input": 184,
-          "output": 25644,
-          "cacheRead": 13026041,
-          "cacheWrite": 321024
+          "input": 186,
+          "output": 25824,
+          "cacheRead": 13063438,
+          "cacheWrite": 460362
         }
       },
       "costAtCloseOut": {
-        "usd": 3.664584,
-        "pricingAsOf": "2026-08-26T16:06:39.262Z"
+        "usd": 4.022212,
+        "pricingAsOf": "2026-08-26T16:06:40.545Z"
       }
     },
     "merges": [
@@ -198,7 +199,7 @@
     "ranOn": "Sipkovszki-MacBook-Pro-2.local"
   },
   "harness": "claude-code",
-  "model": "claude-sonnet-5",
+  "model": "claude-opus-5",
   "tasks": {
     "sequence": 20,
     "claims": {},
