@@ -14,7 +14,7 @@ describe("Nav", () => {
     mockPathname.mockReturnValue("/");
   });
 
-  test("renders links to /, /about, /pricing and /contact", () => {
+  test("renders links to /, /about, /pricing, /contact and /settings/profile", () => {
     render(<Nav />);
 
     expect(screen.getByRole("link", { name: "Home" })).toHaveAttribute(
@@ -33,9 +33,12 @@ describe("Nav", () => {
       "href",
       "/contact",
     );
+    expect(
+      screen.getByRole("link", { name: "Profile Settings" }),
+    ).toHaveAttribute("href", "/settings/profile");
   });
 
-  test("renders exactly four nav links, plus the brand link", () => {
+  test("renders exactly five nav links, plus the brand link", () => {
     render(<Nav />);
 
     // This list is exact on purpose: an accidental addition or removal
@@ -48,6 +51,7 @@ describe("Nav", () => {
       "About",
       "Pricing",
       "Contact",
+      "Profile Settings",
     ]);
 
     // The brand anchor also points at "/" but sits outside the nav landmark,
@@ -56,7 +60,7 @@ describe("Nav", () => {
       "href",
       "/",
     );
-    expect(screen.getAllByRole("link")).toHaveLength(5);
+    expect(screen.getAllByRole("link")).toHaveLength(6);
   });
 
   test.each([
@@ -64,6 +68,7 @@ describe("Nav", () => {
     ["/about", "About"],
     ["/pricing", "Pricing"],
     ["/contact", "Contact"],
+    ["/settings/profile", "Profile Settings"],
   ])("marks the active link for %s", (pathname, activeLabel) => {
     mockPathname.mockReturnValue(pathname);
     render(<Nav />);

@@ -2,6 +2,7 @@ import About from "@/app/about/page";
 import Contact from "@/app/contact/page";
 import Home from "@/app/page";
 import Pricing from "@/app/pricing/page";
+import ProfileSettings from "@/app/settings/profile/page";
 import { render, screen } from "@testing-library/react";
 import { describe, expect, test, vi } from "vitest";
 
@@ -17,6 +18,7 @@ const pages = [
   ["Pricing", Pricing],
   ["About", About],
   ["Contact", Contact],
+  ["Profile Settings", ProfileSettings],
 ] as const;
 
 describe.each(pages)("%s page landmarks", (_name, Page) => {
