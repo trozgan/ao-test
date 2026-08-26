@@ -101,21 +101,21 @@
     "recordedAt": "2026-08-26T16:05:04.801Z"
   },
   "created": "2026-08-26T15:50:56.865Z",
-  "updated": "2026-08-26T16:07:26.038Z",
+  "updated": "2026-08-26T16:07:28.925Z",
   "pipeline": {
     "issueId": "AOT-2",
-    "reviewStatus": "pending",
+    "reviewStatus": "reviewing",
     "testStatus": "pending",
     "verificationStatus": "skipped",
     "mergeStatus": "pending",
     "releaseStatus": "pending",
     "readyForMerge": false,
-    "updatedAt": "2026-08-26T16:07:23.815Z",
+    "updatedAt": "2026-08-26T16:07:24.387Z",
     "reviewNotes": "Agent re-review request (1/25): Verification re-run: the previous test-gate failure was an Overdeck project-config gap, not a code defect. npm test passed 16 files / 63 tests; the gate then ran a second command against src/dashboard/frontend/package.json, a path from the Overdeck repo that does not exist in ao-test. Added a vitest suite for ao-test in ~/.overdeck/projects.yaml so the gate runs this project's own tests. typecheck and lint already passed.",
     "verificationNotes": "Verification FAILED at test (4022ms).\n\nFull gate output: /Users/sipkovszkirobert/Projects/ao-test/workspaces/feature-aot-2/.overdeck/verification-latest.json",
     "prUrl": "https://github.com/trozgan/ao-test/pull/3",
     "reviewRequestedAt": "2026-08-26T16:05:08.138Z",
-    "reviewSpawnedAt": "2026-08-26T16:06:40.541Z",
+    "reviewSpawnedAt": "2026-08-26T16:07:24.387Z",
     "scopeDrift": {
       "outsideDeclaredScope": [
         ".gitignore",
@@ -195,7 +195,7 @@
       },
       "costAtCloseOut": {
         "usd": 4.105021,
-        "pricingAsOf": "2026-08-26T16:07:24.799Z"
+        "pricingAsOf": "2026-08-26T16:07:28.925Z"
       }
     },
     "merges": [
@@ -204,7 +204,7 @@
     "ranOn": "Sipkovszki-MacBook-Pro-2.local"
   },
   "harness": "claude-code",
-  "model": "claude-opus-5",
+  "model": "claude-sonnet-5",
   "tasks": {
     "sequence": 20,
     "claims": {},
