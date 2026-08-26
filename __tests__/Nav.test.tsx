@@ -14,7 +14,7 @@ describe("Nav", () => {
     mockPathname.mockReturnValue("/");
   });
 
-  test("renders links to /, /about and /pricing", () => {
+  test("renders links to /, /about, /pricing and /contact", () => {
     render(<Nav />);
 
     expect(screen.getByRole("link", { name: "Home" })).toHaveAttribute(
@@ -28,6 +28,10 @@ describe("Nav", () => {
     expect(screen.getByRole("link", { name: "Pricing" })).toHaveAttribute(
       "href",
       "/pricing",
+    );
+    expect(screen.getByRole("link", { name: "Contact" })).toHaveAttribute(
+      "href",
+      "/contact",
     );
   });
 
