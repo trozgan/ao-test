@@ -34,3 +34,16 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Profile settings
+
+The `/settings/profile` route renders the reusable `ProfileForm` component, letting a visitor set their name, email, and timezone.
+
+Saving posts to `POST /api/profile` with a JSON body of `name`, `email`, and `timezone`:
+
+- A successful save returns status `200` with `{ profile }`.
+- An invalid submission returns status `400` with `{ errors }`, keyed by field name.
+
+`app/lib/profile/validation.ts` owns the validation rules shared by the client and the server, `app/lib/profile/repository.ts` owns storage, and `app/lib/profile/service.ts` composes the two for the route handler.
+
+Persistence is a single in-process record shared by every visitor. It resets whenever the server restarts.
