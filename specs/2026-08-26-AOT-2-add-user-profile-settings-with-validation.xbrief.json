@@ -4,17 +4,17 @@
     "created": "2026-08-26T15:24:00Z",
     "author": "overdeck/0.0.0",
     "description": "Plan for AOT-2: Add user profile settings with validation",
-    "updated": "2026-08-26T15:31:40.559Z"
+    "updated": "2026-08-26T15:51:02.164Z"
   },
   "plan": {
     "id": "aot-2",
     "title": "Add user profile settings with validation",
-    "status": "proposed",
+    "status": "running",
     "uid": "a44ec90c-99f2-427a-902b-e7e8b826b0be",
     "author": "agent:claude-opus-5",
-    "sequence": 2,
+    "sequence": 3,
     "created": "2026-08-26T15:24:00Z",
-    "updated": "2026-08-26T15:31:40.559Z",
+    "updated": "2026-08-26T15:51:02.164Z",
     "references": [
       {
         "uri": "https://github.com/trozgan/ao-test/issues/2",
@@ -922,5 +922,5 @@
       "promotionIntent": "automatic"
     }
   },
-  "status": "proposed"
+  "status": "active"
 }
