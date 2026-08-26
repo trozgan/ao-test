@@ -3,7 +3,7 @@
   "schemaVersion": 2,
   "feedback": [],
   "created": "2026-08-26T15:50:56.865Z",
-  "updated": "2026-08-26T15:55:32.656Z",
+  "updated": "2026-08-26T15:56:25.671Z",
   "pipeline": {
     "issueId": "AOT-2",
     "reviewStatus": "pending",
@@ -36,16 +36,8 @@
     }
   ],
   "tasks": {
-    "sequence": 11,
-    "claims": {
-      "profile-form": {
-        "writerId": "agent-aot-2",
-        "agentId": "agent-aot-2",
-        "pid": 26975,
-        "host": "Sipkovszki-MacBook-Pro-2.local",
-        "claimedAt": "2026-08-26T15:55:32.656Z"
-      }
-    },
+    "sequence": 12,
+    "claims": {},
     "claimHistory": [
       {
         "writerId": "agent-aot-2",
@@ -96,6 +88,16 @@
         "itemId": "profile-api-route",
         "outcome": "completed",
         "releasedAt": "2026-08-26T15:55:26.970Z"
+      },
+      {
+        "writerId": "agent-aot-2",
+        "agentId": "agent-aot-2",
+        "pid": 26975,
+        "host": "Sipkovszki-MacBook-Pro-2.local",
+        "claimedAt": "2026-08-26T15:55:32.656Z",
+        "itemId": "profile-form",
+        "outcome": "completed",
+        "releasedAt": "2026-08-26T15:56:25.671Z"
       }
     ]
   },
@@ -126,6 +128,11 @@
     "profile-api-route.ac3": "completed",
     "profile-api-route.ac4": "completed",
     "profile-api-route.ac5": "completed",
-    "profile-form": "running"
+    "profile-form": "completed",
+    "profile-form.ac1": "completed",
+    "profile-form.ac2": "completed",
+    "profile-form.ac3": "completed",
+    "profile-form.ac4": "completed",
+    "profile-form.ac5": "completed"
   }
 }
