@@ -3,7 +3,7 @@
   "schemaVersion": 2,
   "feedback": [],
   "created": "2026-08-26T15:50:56.865Z",
-  "updated": "2026-08-26T15:58:39.520Z",
+  "updated": "2026-08-26T15:58:46.267Z",
   "pipeline": {
     "issueId": "AOT-2",
     "reviewStatus": "pending",
@@ -41,16 +41,8 @@
     }
   ],
   "tasks": {
-    "sequence": 19,
-    "claims": {
-      "gate-sweep": {
-        "writerId": "agent-aot-2",
-        "agentId": "agent-aot-2",
-        "pid": 57317,
-        "host": "Sipkovszki-MacBook-Pro-2.local",
-        "claimedAt": "2026-08-26T15:58:20.284Z"
-      }
-    },
+    "sequence": 20,
+    "claims": {},
     "claimHistory": [
       {
         "writerId": "agent-aot-2",
@@ -141,6 +133,16 @@
         "itemId": "profile-docs",
         "outcome": "completed",
         "releasedAt": "2026-08-26T15:58:15.383Z"
+      },
+      {
+        "writerId": "agent-aot-2",
+        "agentId": "agent-aot-2",
+        "pid": 57317,
+        "host": "Sipkovszki-MacBook-Pro-2.local",
+        "claimedAt": "2026-08-26T15:58:20.284Z",
+        "itemId": "gate-sweep",
+        "outcome": "completed",
+        "releasedAt": "2026-08-26T15:58:46.267Z"
       }
     ]
   },
@@ -192,6 +194,11 @@
     "profile-docs.ac2": "completed",
     "profile-docs.ac3": "completed",
     "profile-docs.ac4": "completed",
-    "gate-sweep": "running"
+    "gate-sweep": "completed",
+    "gate-sweep.ac1": "completed",
+    "gate-sweep.ac2": "completed",
+    "gate-sweep.ac3": "completed",
+    "gate-sweep.ac4": "completed",
+    "gate-sweep.ac5": "completed"
   }
 }
