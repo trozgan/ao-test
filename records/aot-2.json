@@ -111,7 +111,7 @@
     "recordedAt": "2026-08-26T16:05:04.801Z"
   },
   "created": "2026-08-26T15:50:56.865Z",
-  "updated": "2026-08-26T16:06:23.977Z",
+  "updated": "2026-08-26T16:06:27.584Z",
   "pipeline": {
     "issueId": "AOT-2",
     "reviewStatus": "pending",
@@ -120,8 +120,8 @@
     "mergeStatus": "pending",
     "releaseStatus": "pending",
     "readyForMerge": false,
-    "updatedAt": "2026-08-26T16:06:19.987Z",
-    "reviewNotes": "Verification failed at typecheck — fix and resubmit",
+    "updatedAt": "2026-08-26T16:06:27.578Z",
+    "reviewNotes": "Verification failed at test — fix and resubmit",
     "verificationNotes": "Verification FAILED at test (4022ms).\n\nFull gate output: /Users/sipkovszkirobert/Projects/ao-test/workspaces/feature-aot-2/.overdeck/verification-latest.json",
     "prUrl": "https://github.com/trozgan/ao-test/pull/3",
     "reviewRequestedAt": "2026-08-26T16:05:08.138Z",
@@ -204,7 +204,7 @@
       },
       "costAtCloseOut": {
         "usd": 3.625836,
-        "pricingAsOf": "2026-08-26T16:06:19.991Z"
+        "pricingAsOf": "2026-08-26T16:06:27.580Z"
       }
     },
     "merges": [
