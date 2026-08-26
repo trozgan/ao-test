@@ -101,20 +101,19 @@
     "recordedAt": "2026-08-26T16:05:04.801Z"
   },
   "created": "2026-08-26T15:50:56.865Z",
-  "updated": "2026-08-26T16:07:43.245Z",
+  "updated": "2026-08-26T16:10:24.963Z",
   "pipeline": {
     "issueId": "AOT-2",
-    "reviewStatus": "reviewing",
+    "reviewStatus": "passed",
     "testStatus": "pending",
-    "verificationStatus": "skipped",
+    "verificationStatus": "passed",
     "mergeStatus": "pending",
     "releaseStatus": "pending",
     "readyForMerge": false,
-    "updatedAt": "2026-08-26T16:07:30.508Z",
-    "reviewNotes": "Agent re-review request (1/25): Verification re-run: the previous test-gate failure was an Overdeck project-config gap, not a code defect. npm test passed 16 files / 63 tests; the gate then ran a second command against src/dashboard/frontend/package.json, a path from the Overdeck repo that does not exist in ao-test. Added a vitest suite for ao-test in ~/.overdeck/projects.yaml so the gate runs this project's own tests. typecheck and lint already passed.",
-    "verificationNotes": "Verification FAILED at test (4022ms).\n\nFull gate output: /Users/sipkovszkirobert/Projects/ao-test/workspaces/feature-aot-2/.overdeck/verification-latest.json",
+    "updatedAt": "2026-08-26T16:10:24.926Z",
+    "reviewNotes": "All 11 FRs + 7 NFRs met; typecheck/lint/test/build green (16 files, 63 tests); 5 minor non-blocking findings (unguarded fetch, no in-flight submit guard, untrimmed storage, spacing nit, committed pipeline state)",
+    "verificationNotes": "Cleared by `pan specialists done review --status passed` override (PAN-1215)",
     "prUrl": "https://github.com/trozgan/ao-test/pull/3",
-    "reviewRequestedAt": "2026-08-26T16:05:08.138Z",
     "reviewSpawnedAt": "2026-08-26T16:07:24.387Z",
     "scopeDrift": {
       "outsideDeclaredScope": [
@@ -178,24 +177,24 @@
       "byStage": {
         "work": {
           "anthropic/claude-sonnet-5": {
-            "input": 190,
-            "output": 26359,
-            "cacheRead": 13418878,
-            "cacheWrite": 462907
+            "input": 208,
+            "output": 30743,
+            "cacheRead": 15060505,
+            "cacheWrite": 472473
           }
         }
       },
       "totals": {
         "anthropic/claude-sonnet-5": {
-          "input": 190,
-          "output": 26359,
-          "cacheRead": 13418878,
-          "cacheWrite": 462907
+          "input": 208,
+          "output": 30743,
+          "cacheRead": 15060505,
+          "cacheWrite": 472473
         }
       },
       "costAtCloseOut": {
-        "usd": 4.105021,
-        "pricingAsOf": "2026-08-26T16:07:43.237Z"
+        "usd": 4.501137,
+        "pricingAsOf": "2026-08-26T16:10:24.957Z"
       }
     },
     "merges": [
