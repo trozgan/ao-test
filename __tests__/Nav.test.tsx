@@ -31,11 +31,11 @@ describe("Nav", () => {
     );
   });
 
-  test("renders exactly three nav links, plus the brand link", () => {
+  test("renders exactly four nav links, plus the brand link", () => {
     render(<Nav />);
 
-    // /contact is deliberately kept out of Nav. This exact count is what
-    // enforces that decision - adding a fourth link here fails the test.
+    // This list is exact on purpose: an accidental addition or removal
+    // fails loudly here rather than silently changing the site nav.
     const navLinks = within(screen.getByRole("navigation")).getAllByRole(
       "link",
     );
@@ -43,6 +43,7 @@ describe("Nav", () => {
       "Home",
       "About",
       "Pricing",
+      "Contact",
     ]);
 
     // The brand anchor also points at "/" but sits outside the nav landmark,
@@ -51,7 +52,7 @@ describe("Nav", () => {
       "href",
       "/",
     );
-    expect(screen.getAllByRole("link")).toHaveLength(4);
+    expect(screen.getAllByRole("link")).toHaveLength(5);
   });
 
   test.each([

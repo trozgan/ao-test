@@ -16,10 +16,10 @@ export default function Contact() {
         Tell us which plan you are looking at and we will get back to you
         within one business day.
       </p>
-      <p className="mt-6 text-lg leading-8 text-foreground/70">
+      <p className="mt-6 max-w-prose text-lg leading-8 text-foreground/70">
         <a
           href="mailto:hello@northwind.example"
-          className="font-medium text-foreground underline"
+          className="inline-flex min-h-11 items-center font-medium text-foreground underline"
         >
           hello@northwind.example
         </a>
