@@ -1,0 +1,247 @@
+{
+  "xBRIEFInfo": {
+    "version": "0.8",
+    "created": "2026-08-26T15:18:48Z",
+    "author": "overdeck/0.0.0",
+    "description": "Plan for AOT-1: Add pricing page",
+    "updated": "2026-08-26T15:22:38.539Z"
+  },
+  "plan": {
+    "id": "aot-1",
+    "title": "Add pricing page",
+    "status": "proposed",
+    "uid": "509bb17b-11d6-43d5-8add-430b350a4722",
+    "author": "agent:claude-opus-5",
+    "sequence": 2,
+    "created": "2026-08-26T15:18:48Z",
+    "updated": "2026-08-26T15:22:38.539Z",
+    "references": [
+      {
+        "uri": "https://github.com/trozgan/ao-test/issues/1",
+        "label": "AOT-1",
+        "type": "issue"
+      }
+    ],
+    "tags": [
+      "pricing",
+      "docs",
+      "tooling",
+      "lint",
+      "already-shipped"
+    ],
+    "narratives": {
+      "Problem": "The issue asks for a responsive pricing page with three tiers, a nav link, reused components, a clean lint run and a clean production build. Verified at d46242d, all of that already ships: app/pricing/page.tsx:11-56 defines Starter/Team/Enterprise, app/components/Nav.tsx:10 links to /pricing, the page imports ButtonLink/Card/Container, app/pricing/page.tsx:69 is responsive via grid-cols-1 md:grid-cols-3, and __tests__/PricingPage.test.tsx plus __tests__/Nav.test.tsx cover it. npm test passes 35 tests, npm run build prerenders /pricing as static. Two real gaps remain around that shipped feature. First, eslint.config.mjs:9-15 calls globalIgnores with build outputs only; because that call replaces the eslint-config-next defaults rather than extending them, ESLint walks the agent tooling directories and reports a warning from a vendored skill fixture, so a clean project diff cannot produce a clean lint report and 'fix any introduced errors' has no unambiguous answer. Second, README.md is untouched create-next-app boilerplate that names no route, no component, and neither npm run lint nor npm test, so nothing tells a contributor that /pricing exists or how to verify a change to it.",
+      "Proposal": "Do not re-implement the pricing page. Ship the verified delta as two independent, mechanically checkable slices. Slice one appends .claude/**, .overdeck/** and .pan/** to the existing globalIgnores array in eslint.config.mjs so npm run lint reports on application source only, proven both ways: zero problems on a clean tree, and a temporary unused variable in app/pricing/page.tsx still flagged. Slice two replaces README.md with a project guide carrying a routes table that names the three pricing tiers, a components section pointing at the UI kit and buttonStyles.ts, an add-a-route procedure, and the three verification commands with what each one checks. Neither slice touches app/ or __tests__/, so the shipped page and its 35 passing tests are structurally protected.",
+      "NonGoals": "- Rewriting, restyling, or re-scaffolding app/pricing/page.tsx\n- Changing tier names, prices, feature lists, or CTA targets\n- Any change to a file under app/\n- Any change to a file under __tests__/\n- Adding a CI workflow or a .github/ directory\n- Adding Playwright, any end-to-end harness, or a responsive-layout test\n- Editing the vendored file under .claude/skills/ that trips the current lint warning\n- Extracting the hardcoded tiers array into a data module or CMS\n- Changing the AGENTS.md block that next dev regenerates"
+    },
+    "autoDecisions": [
+      {
+        "summary": "Do not re-implement the pricing page; scope the plan to the verified delta instead.",
+        "rationale": "Every functional requirement in the issue is already met by tested code at d46242d. Rewriting working, covered code to satisfy the letter of a stale issue risks regression for no user-visible gain."
+      },
+      {
+        "summary": "Fix the lint noise in eslint.config.mjs rather than by editing the vendored .claude/skills file that emits it.",
+        "rationale": "That file is distributed by pan sync and is overwritten on the next sync, so a fix inside it does not survive. The config change is durable and states the intent: these directories are not project source."
+      },
+      {
+        "summary": "Ignore all three agent tooling directories (.claude/, .overdeck/, .pan/), not only the one currently emitting a warning.",
+        "rationale": "All three hold agent-written files and can acquire lintable content at any time. Listing one and omitting the others invites the same warning back from a different directory."
+      },
+      {
+        "summary": "Rewrite README.md rather than appending a routes section to the existing boilerplate.",
+        "rationale": "The Getting Started, Learn More, and Deploy on Vercel sections describe the create-next-app scaffold, not this app. Appending leaves the misleading material as the first thing a reader sees."
+      },
+      {
+        "summary": "Do not add a CI workflow.",
+        "rationale": "No .github/ exists and nothing enforces the gates automatically. That is a real weakness, recorded in .pan/context/codebase/concerns.md, but it is outside 'Add pricing page' and belongs in its own issue."
+      },
+      {
+        "summary": "Do not add a responsive-layout test for /pricing.",
+        "rationale": "The page uses the same md:grid-cols-3 breakpoint as the already-shipped home page, and every test in this repo queries by role and accessible name. Asserting Tailwind class strings would be the suite's first off-convention test and would pin markup rather than behavior."
+      },
+      {
+        "summary": "Ship the two cleanup items rather than closing AOT-1 as already-done.",
+        "rationale": "Closing a tracker issue is an operator decision that auto mode should not make unilaterally, and both items are independently defensible on their own merits."
+      }
+    ],
+    "items": [
+      {
+        "id": "lint-scope-to-source",
+        "title": "Scope the ESLint gate to project source",
+        "status": "pending",
+        "priority": "medium",
+        "created": "2026-08-26T15:18:48Z",
+        "metadata": {
+          "difficulty": "simple",
+          "kind": "infra",
+          "issueLabel": "aot-1",
+          "requiresInspection": false,
+          "inspectionDepth": "fast",
+          "files_scope": [
+            "eslint.config.mjs"
+          ],
+          "files_scope_confidence": "high",
+          "verify_commands": [
+            "npm run lint",
+            "npm test",
+            "npm run build",
+            "git diff --name-only main"
+          ],
+          "expected_outputs": [
+            "npm run lint exits 0 and prints no problem-count line",
+            "no path under .claude/, .overdeck/ or .pan/ appears in the lint output",
+            "npm test reports 35 passing tests across 10 files",
+            "npm run build compiles and lists /pricing as static",
+            "git diff --name-only main lists eslint.config.mjs and no path under app/ or __tests__/"
+          ],
+          "readiness": "ready",
+          "traces": [
+            "FR-1",
+            "FR-2",
+            "NFR-1",
+            "NFR-2",
+            "NFR-3"
+          ]
+        },
+        "narrative": {
+          "Action": "Append the agent tooling directories to the existing globalIgnores array in eslint.config.mjs so the lint gate reports on application source only. Open eslint.config.mjs and extend the array at lines 9-15, keeping all four existing entries and the 'Default ignores of eslint-config-next' comment, then adding a second comment and three globs: '.claude/**', '.overdeck/**', '.pan/**'. The comment should say these are agent tooling written into the workspace by Overdeck, distributed by pan sync, and not project source. Do NOT rewrite or reorder the existing entries: globalIgnores REPLACES the ignore set eslint-config-next would contribute rather than extending it, so dropping '.next/**', 'out/**', 'build/**' or 'next-env.d.ts' would flood the output with build artifacts. Do NOT edit .claude/skills/stitch-react-components/examples/gold-standard-card.tsx, the vendored fixture that currently emits the warning; pan sync overwrites it. Prove the ignore is not over-broad: temporarily add an unused variable to app/pricing/page.tsx, run npm run lint, confirm it is flagged, then revert that edit and do not commit it. Touch no other file."
+        },
+        "items": [
+          {
+            "id": "lint-scope-to-source.ac1",
+            "title": "Given a clean working tree, when npm run lint runs from the repository root, then it exits 0 and produces no problem-count line",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "lint-scope-to-source.ac2",
+            "title": "When npm run lint runs, it produces output containing no file path under .claude/, .overdeck/, or .pan/",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "lint-scope-to-source.ac3",
+            "title": "Given a temporary unused variable added to app/pricing/page.tsx, when npm run lint runs, then it reports that variable under no-unused-vars, proving application source is still linted",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "lint-scope-to-source.ac4",
+            "title": "eslint.config.mjs preserves the four pre-existing ignore entries .next/**, out/**, build/**, and next-env.d.ts alongside the three new tooling globs",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "lint-scope-to-source.ac5",
+            "title": "git diff --name-only main returns eslint.config.mjs and no path under app/ or __tests__/, and npm test produces 35 passing tests across 10 files",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          }
+        ]
+      },
+      {
+        "id": "readme-project-guide",
+        "title": "Replace the boilerplate README with a project guide",
+        "status": "pending",
+        "priority": "medium",
+        "created": "2026-08-26T15:18:48Z",
+        "metadata": {
+          "difficulty": "simple",
+          "kind": "docs",
+          "issueLabel": "aot-1",
+          "requiresInspection": false,
+          "inspectionDepth": "fast",
+          "files_scope": [
+            "README.md"
+          ],
+          "files_scope_confidence": "high",
+          "verify_commands": [
+            "grep -n 'app/pricing/page.tsx' README.md",
+            "grep -nE 'Starter|Team|Enterprise' README.md",
+            "grep -nE 'npm run lint|npm test|npm run build' README.md",
+            "grep -c 'Deploy on Vercel' README.md",
+            "npm test",
+            "git diff --name-only main"
+          ],
+          "expected_outputs": [
+            "grep finds app/pricing/page.tsx in the routes table",
+            "grep finds Starter, Team, and Enterprise on the /pricing row",
+            "grep finds all three verification commands",
+            "grep -c 'Deploy on Vercel' returns 0",
+            "npm test reports 35 passing tests across 10 files",
+            "git diff --name-only main lists README.md and no path under app/ or __tests__/"
+          ],
+          "readiness": "ready",
+          "traces": [
+            "FR-3",
+            "FR-4",
+            "FR-5",
+            "NFR-1",
+            "NFR-2"
+          ]
+        },
+        "narrative": {
+          "Action": "Rewrite README.md so it describes this application instead of the create-next-app scaffold. Replace the whole file. Keep a short Getting Started with npm install and npm run dev, and drop the yarn/pnpm/bun variants, the Learn More section, and the Deploy on Vercel section. Add a Routes section as a table with Route, File, and What it contains columns covering / (app/page.tsx, hero plus three feature cards plus closing CTA), /about (app/about/page.tsx), /pricing (app/pricing/page.tsx, the Starter, Team and Enterprise tiers with Team marked most popular), and /contact (app/contact/page.tsx). Add a Components section describing Container, Card, Button, ButtonLink, and buttonStyles.ts, and stating that button appearance is changed in buttonStyles.ts rather than in the components. Add an Adding a route section giving the four steps: create app/<route>/page.tsx as a Server Component wrapped in Container, add a row to the links array in app/components/Nav.tsx, add the page to the pages tuple in __tests__/pageLandmarks.test.tsx, and add a __tests__/<Name>Page.test.tsx. Add a Verifying a change section listing npm run lint (ESLint over application source), npm test (Vitest in jsdom, a single run), and npm run build (production build, which also runs the TypeScript check). Touch no file other than README.md."
+        },
+        "items": [
+          {
+            "id": "readme-project-guide.ac1",
+            "title": "README.md renders a routes table listing all four routes with their file paths: /, /about, /pricing, and /contact",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "readme-project-guide.ac2",
+            "title": "The /pricing row of the routes table renders the three tier names Starter, Team, and Enterprise",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "readme-project-guide.ac3",
+            "title": "A Verifying a change section renders npm run lint, npm test, and npm run build, each followed by a sentence stating what that command checks",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "readme-project-guide.ac4",
+            "title": "README.md renders app/components/Nav.tsx as the place a new route is registered and buttonStyles.ts as the place button appearance is changed",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "readme-project-guide.ac5",
+            "title": "grep -c 'Deploy on Vercel' README.md returns 0, and git diff --name-only main lists README.md and no path under app/ or __tests__/",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          }
+        ]
+      }
+    ],
+    "edges": [],
+    "metadata": {
+      "canonicalFilename": "2026-08-26-AOT-1-add-pricing-page.xbrief.json",
+      "promotionIntent": "automatic"
+    }
+  },
+  "status": "proposed"
+}
