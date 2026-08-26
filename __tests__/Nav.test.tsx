@@ -59,6 +59,7 @@ describe("Nav", () => {
     ["/", "Home"],
     ["/about", "About"],
     ["/pricing", "Pricing"],
+    ["/contact", "Contact"],
   ])("marks the active link for %s", (pathname, activeLabel) => {
     mockPathname.mockReturnValue(pathname);
     render(<Nav />);
