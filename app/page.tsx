@@ -36,7 +36,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mt-16 grid grid-cols-1 gap-6 sm:mt-24 sm:grid-cols-3">
+      <section className="mt-16 grid grid-cols-1 gap-6 sm:mt-24 md:grid-cols-3">
         {features.map(({ title, body }) => (
           <Card key={title}>
             <h2 className="text-lg font-semibold tracking-tight">{title}</h2>

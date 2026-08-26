@@ -61,7 +61,7 @@ export default function Pricing() {
       <h1 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
         Pricing
       </h1>
-      <p className="mt-4 max-w-prose text-lg leading-8 text-foreground/70">
+      <p className="mt-6 max-w-prose text-lg leading-8 text-foreground/70">
         Simple plans that scale with your team. Switch or cancel whenever you
         like.
       </p>

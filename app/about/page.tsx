@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 export default function About() {
   return (
     <Container className="py-16 sm:py-24">
-      <h1 className="text-3xl font-semibold leading-10 tracking-tight text-foreground sm:text-4xl">
+      <h1 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
         About
       </h1>
       <p className="mt-6 max-w-prose text-lg leading-8 text-foreground/70">
