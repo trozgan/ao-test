@@ -21,7 +21,7 @@ const tiers = [
       "1 GB storage",
     ],
     cta: "Get started",
-    href: "/",
+    href: "/contact",
     featured: false,
   },
   {
@@ -36,7 +36,7 @@ const tiers = [
       "100 GB storage",
     ],
     cta: "Start free trial",
-    href: "/",
+    href: "/contact",
     featured: true,
   },
   {
@@ -50,7 +50,7 @@ const tiers = [
       "99.9% uptime SLA",
     ],
     cta: "Talk to us",
-    href: "/about",
+    href: "/contact",
     featured: false,
   },
 ];
