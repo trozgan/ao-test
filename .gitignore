@@ -53,3 +53,6 @@ next-env.d.ts
 .overdeck/test/
 .overdeck/kickoff.md
 .overdeck/agent-mcp.json
+
+# overdeck test-run reports
+/reports/
