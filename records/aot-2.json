@@ -3,7 +3,7 @@
   "schemaVersion": 2,
   "feedback": [],
   "created": "2026-08-26T15:50:56.865Z",
-  "updated": "2026-08-26T15:56:25.671Z",
+  "updated": "2026-08-26T15:56:30.554Z",
   "pipeline": {
     "issueId": "AOT-2",
     "reviewStatus": "pending",
@@ -36,8 +36,16 @@
     }
   ],
   "tasks": {
-    "sequence": 12,
-    "claims": {},
+    "sequence": 13,
+    "claims": {
+      "profile-settings-page": {
+        "writerId": "agent-aot-2",
+        "agentId": "agent-aot-2",
+        "pid": 37337,
+        "host": "Sipkovszki-MacBook-Pro-2.local",
+        "claimedAt": "2026-08-26T15:56:30.554Z"
+      }
+    },
     "claimHistory": [
       {
         "writerId": "agent-aot-2",
@@ -133,6 +141,7 @@
     "profile-form.ac2": "completed",
     "profile-form.ac3": "completed",
     "profile-form.ac4": "completed",
-    "profile-form.ac5": "completed"
+    "profile-form.ac5": "completed",
+    "profile-settings-page": "running"
   }
 }
