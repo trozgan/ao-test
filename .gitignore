@@ -42,3 +42,14 @@ next-env.d.ts
 
 # overdeck worktrees
 /workspaces/
+
+# PAN-2541: permanent state is on overdeck-state; workspace runtime stays local.
+.pan/
+.overdeck/continue.json
+.overdeck/spec.vbrief.json
+.overdeck/sessions.jsonl
+.overdeck/feedback/
+.overdeck/review/
+.overdeck/test/
+.overdeck/kickoff.md
+.overdeck/agent-mcp.json
