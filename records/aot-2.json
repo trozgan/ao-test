@@ -1,9 +1,82 @@
 {
   "issueId": "AOT-2",
   "schemaVersion": 2,
+  "sessionHistory": [
+    {
+      "reason": "resume",
+      "agentModel": "claude-sonnet-5",
+      "timestamp": "2026-08-26T15:51:51.310Z"
+    },
+    {
+      "reason": "resume",
+      "agentModel": "claude-opus-5",
+      "timestamp": "2026-08-26T15:58:39.484Z"
+    },
+    {
+      "timestamp": "2026-08-26T16:05:10.392Z",
+      "reason": "end",
+      "note": "Profile settings with validation: /settings/profile page, reusable ProfileForm, POST /api/profile backed by a validation/repository/service split, nav link, and 28 new tests. Lint, tests (16 files/63 tests) and the production build verified green."
+    }
+  ],
   "feedback": [],
+  "scopeDrift": {
+    "outsideDeclaredScope": [
+      ".gitignore",
+      ".pan/context/codebase/architecture.md",
+      ".pan/context/codebase/concerns.md",
+      ".pan/context/codebase/conventions.md",
+      ".pan/context/codebase/stack.md",
+      ".pan/records/aot-2.json"
+    ],
+    "declaredScopeUntouched": [],
+    "declaredScope": [
+      "README.md",
+      "__tests__/Nav.test.tsx",
+      "__tests__/ProfileForm.test.tsx",
+      "__tests__/ProfileSettingsPage.test.tsx",
+      "__tests__/pageLandmarks.test.tsx",
+      "__tests__/profileApiRoute.test.ts",
+      "__tests__/profileRepository.test.ts",
+      "__tests__/profileService.test.ts",
+      "__tests__/profileValidation.test.ts",
+      "app/api/profile/route.ts",
+      "app/components/Nav.tsx",
+      "app/components/ProfileForm.tsx",
+      "app/lib/profile/repository.ts",
+      "app/lib/profile/service.ts",
+      "app/lib/profile/validation.ts",
+      "app/settings/profile/page.tsx",
+      "vitest.config.mts"
+    ],
+    "actualChangedFiles": [
+      ".gitignore",
+      ".pan/context/codebase/architecture.md",
+      ".pan/context/codebase/concerns.md",
+      ".pan/context/codebase/conventions.md",
+      ".pan/context/codebase/stack.md",
+      ".pan/records/aot-2.json",
+      "README.md",
+      "__tests__/Nav.test.tsx",
+      "__tests__/ProfileForm.test.tsx",
+      "__tests__/ProfileSettingsPage.test.tsx",
+      "__tests__/pageLandmarks.test.tsx",
+      "__tests__/profileApiRoute.test.ts",
+      "__tests__/profileRepository.test.ts",
+      "__tests__/profileService.test.ts",
+      "__tests__/profileValidation.test.ts",
+      "app/api/profile/route.ts",
+      "app/components/Nav.tsx",
+      "app/components/ProfileForm.tsx",
+      "app/lib/profile/repository.ts",
+      "app/lib/profile/service.ts",
+      "app/lib/profile/validation.ts",
+      "app/settings/profile/page.tsx",
+      "vitest.config.mts"
+    ],
+    "recordedAt": "2026-08-26T16:05:04.801Z"
+  },
   "created": "2026-08-26T15:50:56.865Z",
-  "updated": "2026-08-26T16:05:08.139Z",
+  "updated": "2026-08-26T16:05:10.453Z",
   "pipeline": {
     "issueId": "AOT-2",
     "reviewStatus": "pending",
@@ -12,7 +85,8 @@
     "mergeStatus": "pending",
     "releaseStatus": "pending",
     "readyForMerge": false,
-    "updatedAt": "2026-08-26T16:05:08.138Z",
+    "updatedAt": "2026-08-26T16:05:10.371Z",
+    "prUrl": "https://github.com/trozgan/ao-test/pull/3",
     "reviewRequestedAt": "2026-08-26T16:05:08.138Z",
     "scopeDrift": {
       "outsideDeclaredScope": [
@@ -69,35 +143,40 @@
         "vitest.config.mts"
       ],
       "recordedAt": "2026-08-26T16:05:04.801Z"
-    },
-    "prUrl": "https://github.com/trozgan/ao-test/pull/3"
+    }
   },
   "closeOut": {
     "usage": {
-      "byStage": {},
-      "totals": {},
+      "byStage": {
+        "work": {
+          "anthropic/claude-sonnet-5": {
+            "input": 156,
+            "output": 22592,
+            "cacheRead": 10783101,
+            "cacheWrite": 183931
+          }
+        }
+      },
+      "totals": {
+        "anthropic/claude-sonnet-5": {
+          "input": 156,
+          "output": 22592,
+          "cacheRead": 10783101,
+          "cacheWrite": 183931
+        }
+      },
       "costAtCloseOut": {
-        "usd": 0,
-        "pricingAsOf": "2026-08-26T15:50:56.918Z"
+        "usd": 2.842686,
+        "pricingAsOf": "2026-08-26T16:05:10.433Z"
       }
     },
-    "merges": [],
+    "merges": [
+      "https://github.com/trozgan/ao-test/pull/3"
+    ],
     "ranOn": "Sipkovszki-MacBook-Pro-2.local"
   },
   "harness": "claude-code",
-  "model": "claude-opus-5",
-  "sessionHistory": [
-    {
-      "reason": "resume",
-      "agentModel": "claude-sonnet-5",
-      "timestamp": "2026-08-26T15:51:51.310Z"
-    },
-    {
-      "reason": "resume",
-      "agentModel": "claude-opus-5",
-      "timestamp": "2026-08-26T15:58:39.484Z"
-    }
-  ],
+  "model": "claude-sonnet-5",
   "tasks": {
     "sequence": 20,
     "claims": {},
@@ -258,61 +337,5 @@
     "gate-sweep.ac3": "completed",
     "gate-sweep.ac4": "completed",
     "gate-sweep.ac5": "completed"
-  },
-  "scopeDrift": {
-    "outsideDeclaredScope": [
-      ".gitignore",
-      ".pan/context/codebase/architecture.md",
-      ".pan/context/codebase/concerns.md",
-      ".pan/context/codebase/conventions.md",
-      ".pan/context/codebase/stack.md",
-      ".pan/records/aot-2.json"
-    ],
-    "declaredScopeUntouched": [],
-    "declaredScope": [
-      "README.md",
-      "__tests__/Nav.test.tsx",
-      "__tests__/ProfileForm.test.tsx",
-      "__tests__/ProfileSettingsPage.test.tsx",
-      "__tests__/pageLandmarks.test.tsx",
-      "__tests__/profileApiRoute.test.ts",
-      "__tests__/profileRepository.test.ts",
-      "__tests__/profileService.test.ts",
-      "__tests__/profileValidation.test.ts",
-      "app/api/profile/route.ts",
-      "app/components/Nav.tsx",
-      "app/components/ProfileForm.tsx",
-      "app/lib/profile/repository.ts",
-      "app/lib/profile/service.ts",
-      "app/lib/profile/validation.ts",
-      "app/settings/profile/page.tsx",
-      "vitest.config.mts"
-    ],
-    "actualChangedFiles": [
-      ".gitignore",
-      ".pan/context/codebase/architecture.md",
-      ".pan/context/codebase/concerns.md",
-      ".pan/context/codebase/conventions.md",
-      ".pan/context/codebase/stack.md",
-      ".pan/records/aot-2.json",
-      "README.md",
-      "__tests__/Nav.test.tsx",
-      "__tests__/ProfileForm.test.tsx",
-      "__tests__/ProfileSettingsPage.test.tsx",
-      "__tests__/pageLandmarks.test.tsx",
-      "__tests__/profileApiRoute.test.ts",
-      "__tests__/profileRepository.test.ts",
-      "__tests__/profileService.test.ts",
-      "__tests__/profileValidation.test.ts",
-      "app/api/profile/route.ts",
-      "app/components/Nav.tsx",
-      "app/components/ProfileForm.tsx",
-      "app/lib/profile/repository.ts",
-      "app/lib/profile/service.ts",
-      "app/lib/profile/validation.ts",
-      "app/settings/profile/page.tsx",
-      "vitest.config.mts"
-    ],
-    "recordedAt": "2026-08-26T16:05:04.801Z"
   }
 }
