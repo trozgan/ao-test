@@ -33,7 +33,7 @@ export default function Nav() {
                 className={
                   active
                     ? "text-foreground"
-                    : "text-zinc-600 transition-colors hover:text-foreground dark:text-zinc-400"
+                    : "text-foreground/70 transition-colors hover:text-foreground"
                 }
               >
                 {label}
