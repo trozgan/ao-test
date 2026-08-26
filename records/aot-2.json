@@ -3,7 +3,7 @@
   "schemaVersion": 2,
   "feedback": [],
   "created": "2026-08-26T15:50:56.865Z",
-  "updated": "2026-08-26T15:52:56.725Z",
+  "updated": "2026-08-26T15:53:12.386Z",
   "pipeline": {
     "issueId": "AOT-2",
     "reviewStatus": "pending",
@@ -36,18 +36,25 @@
     }
   ],
   "tasks": {
-    "sequence": 1,
-    "claims": {
-      "vitest-ts-glob": {
+    "sequence": 2,
+    "claims": {},
+    "claimHistory": [
+      {
         "writerId": "agent-aot-2",
         "agentId": "agent-aot-2",
         "pid": 97881,
         "host": "Sipkovszki-MacBook-Pro-2.local",
-        "claimedAt": "2026-08-26T15:52:56.725Z"
+        "claimedAt": "2026-08-26T15:52:56.725Z",
+        "itemId": "vitest-ts-glob",
+        "outcome": "completed",
+        "releasedAt": "2026-08-26T15:53:12.386Z"
       }
-    }
+    ]
   },
   "statusOverrides": {
-    "vitest-ts-glob": "running"
+    "vitest-ts-glob": "completed",
+    "vitest-ts-glob.ac1": "completed",
+    "vitest-ts-glob.ac2": "completed",
+    "vitest-ts-glob.ac3": "completed"
   }
 }
