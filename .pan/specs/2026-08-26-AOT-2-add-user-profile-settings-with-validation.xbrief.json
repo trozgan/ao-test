@@ -1,0 +1,926 @@
+{
+  "xBRIEFInfo": {
+    "version": "0.8",
+    "created": "2026-08-26T15:24:00Z",
+    "author": "overdeck/0.0.0",
+    "description": "Plan for AOT-2: Add user profile settings with validation",
+    "updated": "2026-08-26T15:31:40.559Z"
+  },
+  "plan": {
+    "id": "aot-2",
+    "title": "Add user profile settings with validation",
+    "status": "proposed",
+    "uid": "a44ec90c-99f2-427a-902b-e7e8b826b0be",
+    "author": "agent:claude-opus-5",
+    "sequence": 2,
+    "created": "2026-08-26T15:24:00Z",
+    "updated": "2026-08-26T15:31:40.559Z",
+    "references": [
+      {
+        "uri": "https://github.com/trozgan/ao-test/issues/2",
+        "label": "AOT-2",
+        "type": "issue"
+      }
+    ],
+    "tags": [
+      "profile",
+      "settings",
+      "validation",
+      "api",
+      "forms",
+      "tests"
+    ],
+    "narratives": {
+      "Problem": "The issue asks for a /settings/profile route, a reusable profile form over name/email/timezone, client-side validation, an API endpoint that saves through a repository or service layer rather than inline route logic, clear success and error states, a nav link, and tests for invalid email, missing required fields and a successful save. None of it exists at fdf7000: `find app -type f` returns four page files and five component files, with no app/settings/, no app/api/ and no app/lib/; app/components/Nav.tsx:7-12 lists exactly four links; `next build` prerenders only /, /_not-found, /about, /contact and /pricing. Three properties of the existing tree decide the sequencing because each one breaks a naive implementation silently. First, vitest.config.mts:9 sets include to __tests__/**/*.test.tsx, so a non-JSX test written as __tests__/foo.test.ts is never collected while npm test still exits 0 and prints a green summary. Second, __tests__/Nav.test.tsx:38-60 asserts the nav link list exactly, toEqual(['Home','About','Pricing','Contact']) plus getAllByRole('link') toHaveLength(5), and the comment at line 41 says that exactness is deliberate, so a fifth nav entry fails that file unless the same commit updates it. Third, @testing-library/user-event is not a dependency, so interaction tests must use fireEvent. One ambiguity was settled empirically during planning rather than left to the work agent: Web Request, Response, Response.json() and fetch are all available in this vitest jsdom environment, verified with a throwaway probe, so route-handler tests need no environment pragma.",
+      "Proposal": "Ship the feature as a chain of small vertical slices, each independently reviewable and each leaving the tree green. The persistence path is a three-module stack under app/lib/profile/, this repo's first non-component module directory: validation.ts holds the pure rules, the ProfileInput/ProfileErrors types and a fixed six-entry TIMEZONES list; repository.ts holds one module-level record plus getProfile/saveProfile/resetProfile; service.ts composes both into saveUserProfile() returning a discriminated { ok: true, profile } | { ok: false, errors } result. app/api/profile/route.ts is a thin POST handler that coerces the JSON body to three strings, calls saveUserProfile, and maps ok:false to HTTP 400 with the error map and ok:true to HTTP 200 with the saved profile; it contains no regex, no validation branch and no storage variable, which is the small repository/service layer the issue asks for. app/components/ProfileForm.tsx is the reusable client component and imports the same validateProfile the server uses, so a rule can never be enforced in one place and not the other; it validates on submit, renders per-field error text, and only issues the fetch when the client-side check is clean. app/settings/profile/page.tsx is a thin Server Component that mounts it, matching how every other page in the repo is written. Sequencing follows the traps: the vitest glob widens first because five later items add .test.ts files, and the nav link ships together with its test update in one item.",
+      "NonGoals": "- No real database, file, cookie, or localStorage persistence; the mock repository is one in-process record that resets on server restart\n- No authentication, authorization, session, or per-user profile record\n- No GET /api/profile endpoint and no hydration of saved values into the form\n- No new runtime or dev dependency in package.json\n- No zod or other schema library, and no react-hook-form\n- No @testing-library/user-event; interaction tests use fireEvent\n- No RFC-5322-complete email validation and no MX or deliverability check\n- No full IANA timezone list and no timezone auto-detection\n- No server actions; the form posts to the route handler\n- No avatar upload, password change, or notification preferences\n- No changes to the content of /, /about, /pricing, or /contact\n- No fix for the pre-existing ESLint warning from .claude/skills/stitch-react-components/examples/gold-standard-card.tsx; AOT-1 owns it\n- No README rewrite; AOT-1 owns that, so this branch appends a section only\n- No CI workflow\n- No Playwright or browser-based verification"
+    },
+    "autoDecisions": [
+      {
+        "summary": "Add no new runtime or dev dependency: hand-write the validation instead of pulling in zod, and drive form tests with fireEvent instead of adding @testing-library/user-event.",
+        "rationale": "package.json carries three runtime dependencies and the issue asks to keep the implementation simple and consistent with the existing architecture. Validation over three fields is about twenty lines, and the existing suite already drives interactions without user-event (__tests__/Button.test.tsx:37)."
+      },
+      {
+        "summary": "Validate email with /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/ rather than an RFC-5322 pattern.",
+        "rationale": "It rejects the cases a user actually hits — no @, no domain, no dot, embedded spaces — without pretending to implement the full grammar. Full correctness is listed as a NonGoal so a reviewer does not read the simple pattern as an oversight."
+      },
+      {
+        "summary": "Make timezone a <select> over a fixed six-entry TIMEZONES array exported from validation.ts, with a leading empty option as the invalid state.",
+        "rationale": "It makes 'timezone is required' enforceable identically on client and server. Intl.supportedValuesOf('timeZone') would return several hundred entries and make test output depend on the host ICU build."
+      },
+      {
+        "summary": "Store one profile in a module-level variable with a resetProfile() test seam, rather than keying records by user.",
+        "rationale": "The issue says mock persistence is acceptable, and the app has no auth and no user identity, so there is nothing to key a record by. The reset export exists because module state survives between tests in a file."
+      },
+      {
+        "summary": "Expose POST /api/profile only, with no GET and no hydration of saved values into the form.",
+        "rationale": "The issue asks for a simple endpoint for saving profile data. A load path is extra surface nothing in the issue requires, so it is recorded as a NonGoal instead of built."
+      },
+      {
+        "summary": "Coerce a malformed or non-object JSON body to three empty strings and return the ordinary 400 validation-error map.",
+        "rationale": "It avoids inventing a second error shape for a case the browser form cannot produce, and keeps ProfileErrors keyed only by field name so the client renders it with one code path."
+      },
+      {
+        "summary": "Run validation on submit, not on change or blur.",
+        "rationale": "All three required test cases are submit-driven, and on-change validation flags a field the user has not finished typing."
+      },
+      {
+        "summary": "Widen vitest include to __tests__/**/*.test.{ts,tsx} rather than naming every non-JSX test file .tsx.",
+        "rationale": "One config line beats a naming convention every future contributor has to be told about, and the failure it prevents is silent: an uncollected test file still reports a green run."
+      },
+      {
+        "summary": "Append a '## Profile settings' section to README.md instead of restructuring the file.",
+        "rationale": "AOT-1 is in flight on a sibling branch with a full README rewrite. Appending at the end keeps both branches mergeable."
+      },
+      {
+        "summary": "Skip Playwright and browser-based verification entirely for this issue.",
+        "rationale": "Every acceptance criterion is checkable from the diff, npm test, npm run lint, or npm run build, so no item needs a running server or an isolated browser profile."
+      }
+    ],
+    "items": [
+      {
+        "id": "vitest-ts-glob",
+        "title": "Widen the vitest include glob to collect .test.ts files",
+        "status": "pending",
+        "priority": "high",
+        "created": "2026-08-26T15:24:00Z",
+        "metadata": {
+          "difficulty": "trivial",
+          "kind": "infra",
+          "issueLabel": "aot-2",
+          "requiresInspection": false,
+          "inspectionDepth": "fast",
+          "files_scope": [
+            "vitest.config.mts"
+          ],
+          "files_scope_confidence": "high",
+          "verify_commands": [
+            "npm test"
+          ],
+          "expected_outputs": [
+            "vitest reports 10 test files and 35 tests passing"
+          ],
+          "readiness": "ready",
+          "traces": [
+            "NFR-4"
+          ]
+        },
+        "narrative": {
+          "Action": "In vitest.config.mts:9, change include from [\"__tests__/**/*.test.tsx\"] to [\"__tests__/**/*.test.{ts,tsx}\"]. Change nothing else in the file. This must land before any later item adds a .test.ts file, because at the current glob such a file is silently skipped while npm test still exits 0 and prints a green summary."
+        },
+        "items": [
+          {
+            "id": "vitest-ts-glob.ac1",
+            "title": "vitest.config.mts contains the include entry \"__tests__/**/*.test.{ts,tsx}\" and preserves its environment, setupFiles and plugins entries unchanged from fdf7000",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "vitest-ts-glob.ac2",
+            "title": "npm test still passes 35 tests across 10 test files, so the glob change drops no existing file",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "vitest-ts-glob.ac3",
+            "title": "package.json survives unchanged, so the glob edit adds no dependency and no script",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          }
+        ]
+      },
+      {
+        "id": "profile-validation",
+        "title": "Add the shared profile validation module",
+        "status": "pending",
+        "priority": "high",
+        "created": "2026-08-26T15:24:00Z",
+        "metadata": {
+          "difficulty": "simple",
+          "kind": "backend",
+          "issueLabel": "aot-2",
+          "requiresInspection": true,
+          "inspectionDepth": "fast",
+          "foundationFor": [
+            "profile-repository",
+            "profile-service",
+            "profile-api-route",
+            "profile-form"
+          ],
+          "files_scope": [
+            "app/lib/profile/validation.ts",
+            "__tests__/profileValidation.test.ts"
+          ],
+          "files_scope_confidence": "high",
+          "verify_commands": [
+            "npm test",
+            "npm run build"
+          ],
+          "expected_outputs": [
+            "vitest reports 11 test files with profileValidation.test.ts among them and all tests passing",
+            "next build finishes the TypeScript step without errors"
+          ],
+          "readiness": "ready",
+          "traces": [
+            "FR-3",
+            "NFR-5"
+          ]
+        },
+        "narrative": {
+          "Action": "Create app/lib/profile/validation.ts exporting: type ProfileInput = { name: string; email: string; timezone: string }; type ProfileErrors = Partial<Record<keyof ProfileInput, string>>; a six-entry `as const` array TIMEZONES = [\"UTC\", \"America/New_York\", \"America/Los_Angeles\", \"Europe/London\", \"Europe/Budapest\", \"Asia/Tokyo\"]; and validateProfile(input: ProfileInput): ProfileErrors. Rules: a name that trims to empty sets errors.name = \"Name is required.\"; an email that trims to empty sets errors.email = \"Email is required.\" and otherwise a trimmed email failing /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/ sets errors.email = \"Enter a valid email address.\"; an empty timezone sets errors.timezone = \"Timezone is required.\" and a non-empty timezone outside TIMEZONES sets errors.timezone = \"Choose a timezone from the list.\". Keep the EMAIL_PATTERN const module-private. This module is imported by both the browser form and the server route, so the rules exist in exactly one place. Add __tests__/profileValidation.test.ts covering each branch."
+        },
+        "items": [
+          {
+            "id": "profile-validation.ac1",
+            "title": "validateProfile returns an empty object for { name: \"Ada\", email: \"ada@example.com\", timezone: \"UTC\" }",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "profile-validation.ac2",
+            "title": "validateProfile returns an errors.email message for each of \"\", \"nope\", \"a@b\" and \"a b@c.com\", and no email key for \"ada@example.com\"",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "profile-validation.ac3",
+            "title": "validateProfile returns errors.name for a name of \"   \" and errors.timezone for both \"\" and an off-list value such as \"Mars/Olympus\"",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "profile-validation.ac4",
+            "title": "validateProfile returns all three keys for { name: \"\", email: \"\", timezone: \"\" }",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "profile-validation.ac5",
+            "title": "npm test collects and passes __tests__/profileValidation.test.ts, raising the reported test-file count from 10 to 11",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          }
+        ]
+      },
+      {
+        "id": "profile-repository",
+        "title": "Add the in-process profile repository",
+        "status": "pending",
+        "priority": "high",
+        "created": "2026-08-26T15:24:00Z",
+        "metadata": {
+          "difficulty": "simple",
+          "kind": "backend",
+          "issueLabel": "aot-2",
+          "requiresInspection": false,
+          "inspectionDepth": "fast",
+          "files_scope": [
+            "app/lib/profile/repository.ts",
+            "__tests__/profileRepository.test.ts"
+          ],
+          "files_scope_confidence": "high",
+          "verify_commands": [
+            "npm test",
+            "npm run build"
+          ],
+          "expected_outputs": [
+            "vitest reports 12 test files with profileRepository.test.ts among them and all tests passing",
+            "next build finishes the TypeScript step without errors"
+          ],
+          "readiness": "ready",
+          "traces": [
+            "FR-7"
+          ]
+        },
+        "narrative": {
+          "Action": "Create app/lib/profile/repository.ts holding a module-level `let storedProfile: ProfileInput | null = null` and exporting getProfile(): ProfileInput | null, saveProfile(profile: ProfileInput): ProfileInput which assigns a spread copy and returns it, and resetProfile(): void which sets storage back to null. Import ProfileInput as a type from ./validation. This module owns storage and nothing else: no validation, no HTTP, no React. Add __tests__/profileRepository.test.ts calling resetProfile() in beforeEach, since module state survives between tests in a file."
+        },
+        "items": [
+          {
+            "id": "profile-repository.ac1",
+            "title": "getProfile() returns null before any save and returns the saved field values after saveProfile()",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "profile-repository.ac2",
+            "title": "A second saveProfile() replaces the first record rather than accumulating, and resetProfile() returns getProfile() to null",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "profile-repository.ac3",
+            "title": "After saveProfile returns, mutating the caller's object leaves storage untouched and getProfile() returns the original field values, proving the record is a copy",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "profile-repository.ac4",
+            "title": "app/lib/profile/repository.ts imports nothing but the ProfileInput type, so it contains no validation regex and no fetch call",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          }
+        ]
+      },
+      {
+        "id": "profile-service",
+        "title": "Add the profile save service composing validation and storage",
+        "status": "pending",
+        "priority": "high",
+        "created": "2026-08-26T15:24:00Z",
+        "metadata": {
+          "difficulty": "simple",
+          "kind": "backend",
+          "issueLabel": "aot-2",
+          "requiresInspection": false,
+          "inspectionDepth": "fast",
+          "files_scope": [
+            "app/lib/profile/service.ts",
+            "__tests__/profileService.test.ts"
+          ],
+          "files_scope_confidence": "high",
+          "verify_commands": [
+            "npm test",
+            "npm run build"
+          ],
+          "expected_outputs": [
+            "vitest reports 13 test files with profileService.test.ts among them and all tests passing",
+            "next build finishes the TypeScript step without errors"
+          ],
+          "readiness": "ready",
+          "traces": [
+            "FR-7"
+          ]
+        },
+        "narrative": {
+          "Action": "Create app/lib/profile/service.ts exporting type SaveProfileResult = { ok: true; profile: ProfileInput } | { ok: false; errors: ProfileErrors } and saveUserProfile(input: ProfileInput): SaveProfileResult. The body calls validateProfile(input); when the returned map has any key it returns { ok: false, errors } WITHOUT touching the repository; otherwise it returns { ok: true, profile: saveProfile(input) }. This is the one call the route handler makes. Add __tests__/profileService.test.ts calling resetProfile() in beforeEach."
+        },
+        "items": [
+          {
+            "id": "profile-service.ac1",
+            "title": "saveUserProfile with a valid input returns { ok: true } carrying the profile, and a following getProfile() returns the same field values",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "profile-service.ac2",
+            "title": "saveUserProfile with a malformed email returns { ok: false } carrying errors.email and leaves getProfile() at null, proving an invalid input never reaches storage",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "profile-service.ac3",
+            "title": "saveUserProfile with all three fields empty returns { ok: false } carrying all three error keys",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "profile-service.ac4",
+            "title": "app/lib/profile/service.ts contains no storage variable and no validation rule of its own, and calls only validateProfile and saveProfile",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          }
+        ]
+      },
+      {
+        "id": "profile-api-route",
+        "title": "Add the POST /api/profile route handler",
+        "status": "pending",
+        "priority": "high",
+        "created": "2026-08-26T15:24:00Z",
+        "metadata": {
+          "difficulty": "medium",
+          "kind": "api",
+          "issueLabel": "aot-2",
+          "requiresInspection": false,
+          "inspectionDepth": "fast",
+          "files_scope": [
+            "app/api/profile/route.ts",
+            "__tests__/profileApiRoute.test.ts"
+          ],
+          "files_scope_confidence": "high",
+          "verify_commands": [
+            "npm test",
+            "npm run build"
+          ],
+          "expected_outputs": [
+            "vitest reports 14 test files with profileApiRoute.test.ts among them and all tests passing",
+            "next build route table lists /api/profile"
+          ],
+          "readiness": "ready",
+          "traces": [
+            "FR-5",
+            "FR-6",
+            "FR-7"
+          ]
+        },
+        "narrative": {
+          "Action": "Create app/api/profile/route.ts exporting `export async function POST(request: Request)`. Read the body with `await request.json()` inside a try/catch that falls back to null on a parse failure. Coerce each of name, email and timezone through a helper that returns the value when typeof is \"string\" and \"\" otherwise, then call saveUserProfile from \"@/app/lib/profile/service\". Return Response.json({ errors: result.errors }, { status: 400 }) when result.ok is false and Response.json({ profile: result.profile }, { status: 200 }) when it is true. Export no other HTTP method. Add __tests__/profileApiRoute.test.ts that imports POST directly and calls it with `new Request(\"http://localhost/api/profile\", { method: \"POST\", body: JSON.stringify(...) })` — a planning probe confirmed Request and Response.json work in this jsdom environment, so do NOT add a @vitest-environment pragma. Call resetProfile() in beforeEach."
+        },
+        "items": [
+          {
+            "id": "profile-api-route.ac1",
+            "title": "POST with { name: \"Ada\", email: \"ada@example.com\", timezone: \"UTC\" } returns status 200 and a body whose profile field carries those three values",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "profile-api-route.ac2",
+            "title": "POST with a malformed email returns status 400 and a body whose errors.email is set, and getProfile() is still null afterwards",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "profile-api-route.ac3",
+            "title": "POST with an empty object body and POST with the unparseable body \"not json\" each returns status 400 carrying all three error keys",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "profile-api-route.ac4",
+            "title": "app/api/profile/route.ts contains no regular expression, no validation branch, and no storage variable — it only coerces the body, calls saveUserProfile, and maps the result to a status code",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "profile-api-route.ac5",
+            "title": "npm run build exits 0 and prints /api/profile in its route table",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          }
+        ]
+      },
+      {
+        "id": "profile-form",
+        "title": "Add the reusable ProfileForm client component",
+        "status": "pending",
+        "priority": "high",
+        "created": "2026-08-26T15:24:00Z",
+        "metadata": {
+          "difficulty": "medium",
+          "kind": "frontend",
+          "issueLabel": "aot-2",
+          "requiresInspection": false,
+          "inspectionDepth": "fast",
+          "files_scope": [
+            "app/components/ProfileForm.tsx",
+            "__tests__/ProfileForm.test.tsx"
+          ],
+          "files_scope_confidence": "high",
+          "verify_commands": [
+            "npm test",
+            "npm run lint",
+            "npm run build"
+          ],
+          "expected_outputs": [
+            "vitest reports 15 test files with ProfileForm.test.tsx among them and all tests passing",
+            "eslint reports no error and no new warning",
+            "next build finishes the TypeScript step without errors"
+          ],
+          "readiness": "ready",
+          "traces": [
+            "FR-2",
+            "FR-3",
+            "FR-4",
+            "FR-8",
+            "NFR-5",
+            "NFR-6",
+            "FR-10"
+          ]
+        },
+        "narrative": {
+          "Action": "Create app/components/ProfileForm.tsx as a \"use client\" component — the repo's second, after Nav. Hold values: ProfileInput (all empty strings initially), errors: ProfileErrors, and status: \"idle\" | \"saving\" | \"saved\". On submit call event.preventDefault(), run validateProfile(values) imported from @/app/lib/profile/validation, and when the map has any key setErrors and RETURN WITHOUT CALLING fetch; otherwise set status to \"saving\" and POST to \"/api/profile\" with a JSON content-type header and JSON.stringify(values) as the body. A non-ok response sets errors from the response body's errors field; an ok response clears errors and sets status to \"saved\". Markup: a <form> with three label-and-control pairs wired by htmlFor/id — a text input for name, a type=\"email\" input for email, and a <select> for timezone whose first option is <option value=\"\">Select a timezone</option> followed by TIMEZONES.map. Each control gets aria-invalid when its field has an error and aria-describedby pointing at a <p role=\"alert\"> holding the message; the success message is a <p role=\"status\"> reading \"Profile saved.\". Submit with the existing <Button type=\"submit\">Save profile</Button> rather than hand-rolled styling. Editing a field clears that field's error and resets status to \"idle\". Test with fireEvent from @testing-library/react — user-event is NOT installed — assigning a vi.fn() to global.fetch and restoring it in afterEach."
+        },
+        "items": [
+          {
+            "id": "profile-form.ac1",
+            "title": "Submitting with every field empty renders an alert per field including \"Name is required.\" and \"Timezone is required.\", and the fetch mock is not called",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "profile-form.ac2",
+            "title": "Submitting with a valid name and timezone but the email \"nope\" renders \"Enter a valid email address.\" and the fetch mock is not called",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "profile-form.ac3",
+            "title": "Submitting three valid values calls the fetch mock once with \"/api/profile\", a POST method, and a JSON body carrying name, email and timezone, and then renders \"Profile saved.\" in a role=status element",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "profile-form.ac4",
+            "title": "A 400 response carrying { errors: { email: \"...\" } } renders that server-supplied message instead of the success text",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "profile-form.ac5",
+            "title": "The form renders all three controls addressable by their visible labels, and the timezone select renders an empty first option followed by one option per TIMEZONES entry",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          }
+        ]
+      },
+      {
+        "id": "profile-settings-page",
+        "title": "Add the /settings/profile page",
+        "status": "pending",
+        "priority": "high",
+        "created": "2026-08-26T15:24:00Z",
+        "metadata": {
+          "difficulty": "simple",
+          "kind": "frontend",
+          "issueLabel": "aot-2",
+          "requiresInspection": false,
+          "inspectionDepth": "fast",
+          "files_scope": [
+            "app/settings/profile/page.tsx",
+            "__tests__/ProfileSettingsPage.test.tsx",
+            "__tests__/pageLandmarks.test.tsx"
+          ],
+          "files_scope_confidence": "high",
+          "verify_commands": [
+            "npm test",
+            "npm run build"
+          ],
+          "expected_outputs": [
+            "vitest reports 16 test files with ProfileSettingsPage.test.tsx among them and all tests passing",
+            "next build route table lists /settings/profile"
+          ],
+          "readiness": "ready",
+          "traces": [
+            "FR-1"
+          ]
+        },
+        "narrative": {
+          "Action": "Create app/settings/profile/page.tsx as a Server Component matching app/about/page.tsx: export metadata with title \"Profile Settings\" and a description, default-export a component wrapping its content in <Container className=\"py-16 sm:py-24\">, an <h1 className=\"text-3xl font-semibold tracking-tight text-foreground sm:text-4xl\">Profile Settings</h1>, one intro paragraph in text-foreground/70, and <ProfileForm />. The page renders no nav or header of its own. Add __tests__/ProfileSettingsPage.test.tsx, and add the tuple entry [\"Profile Settings\", ProfileSettings] to the pages array at __tests__/pageLandmarks.test.tsx:15-20 so the new page joins the landmark check the other four already get."
+        },
+        "items": [
+          {
+            "id": "profile-settings-page.ac1",
+            "title": "Rendering the page shows a level-1 heading named \"Profile Settings\" and the form's three labelled controls",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "profile-settings-page.ac2",
+            "title": "app/settings/profile/page.tsx contains a metadata export whose title is \"Profile Settings\", matching the pattern at app/about/page.tsx:4-7",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "profile-settings-page.ac3",
+            "title": "__tests__/pageLandmarks.test.tsx runs its describe.each over five pages and the new page renders no navigation and no banner landmark",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "profile-settings-page.ac4",
+            "title": "npm run build exits 0 and prints /settings/profile in its route table",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          }
+        ]
+      },
+      {
+        "id": "nav-profile-link",
+        "title": "Link Profile Settings from the main navigation",
+        "status": "pending",
+        "priority": "high",
+        "created": "2026-08-26T15:24:00Z",
+        "metadata": {
+          "difficulty": "simple",
+          "kind": "frontend",
+          "issueLabel": "aot-2",
+          "requiresInspection": false,
+          "inspectionDepth": "fast",
+          "files_scope": [
+            "app/components/Nav.tsx",
+            "__tests__/Nav.test.tsx"
+          ],
+          "files_scope_confidence": "high",
+          "verify_commands": [
+            "npm test"
+          ],
+          "expected_outputs": [
+            "vitest reports 16 test files and every Nav test passing"
+          ],
+          "readiness": "ready",
+          "traces": [
+            "FR-9"
+          ]
+        },
+        "narrative": {
+          "Action": "Add { href: \"/settings/profile\", label: \"Profile Settings\" } as the fifth entry in the links array at app/components/Nav.tsx:7-12. Update __tests__/Nav.test.tsx in the SAME commit — it asserts the nav exactly and will fail otherwise: add a Profile Settings href assertion to the first test, add \"Profile Settings\" to the toEqual list at lines 46-51, change toHaveLength(5) to toHaveLength(6) at line 59 (five nav links plus the brand anchor outside the nav landmark), and add [\"/settings/profile\", \"Profile Settings\"] to the test.each table at lines 62-67. Leave the exact-count style and the explanatory comments in place; that exactness is deliberate."
+        },
+        "items": [
+          {
+            "id": "nav-profile-link.ac1",
+            "title": "Nav renders a link named \"Profile Settings\" whose href is \"/settings/profile\"",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "nav-profile-link.ac2",
+            "title": "The nav landmark renders exactly Home, About, Pricing, Contact and Profile Settings, and the document contains six links in total",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "nav-profile-link.ac3",
+            "title": "Given usePathname mocked to \"/settings/profile\", Nav marks exactly one link with aria-current=page and that link's accessible name is \"Profile Settings\"",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "nav-profile-link.ac4",
+            "title": "The four existing active-link cases still mark exactly one aria-current link each, and the unknown-route case still marks none",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          }
+        ]
+      },
+      {
+        "id": "profile-docs",
+        "title": "Document profile settings in the README",
+        "status": "pending",
+        "priority": "medium",
+        "created": "2026-08-26T15:24:00Z",
+        "metadata": {
+          "difficulty": "simple",
+          "kind": "docs",
+          "issueLabel": "aot-2",
+          "requiresInspection": false,
+          "inspectionDepth": "fast",
+          "files_scope": [
+            "README.md"
+          ],
+          "files_scope_confidence": "high",
+          "verify_commands": [
+            "npm run lint"
+          ],
+          "expected_outputs": [
+            "eslint reports no error and no new warning"
+          ],
+          "readiness": "ready",
+          "traces": [
+            "FR-11"
+          ]
+        },
+        "narrative": {
+          "Action": "Append a '## Profile settings' section to the END of README.md. Do not restructure or delete the existing Getting Started, Learn More, or Deploy on Vercel sections — AOT-1 is rewriting this file on a sibling branch and appending keeps the two mergeable. The section must state: the route /settings/profile and that it renders the reusable ProfileForm component; the POST /api/profile contract, namely a JSON body of name, email and timezone, a 200 response carrying { profile }, and a 400 response carrying { errors } keyed by field name; which module under app/lib/profile/ owns validation, storage and composition; and an explicit caveat that persistence is a single in-process record shared by every visitor that resets whenever the server restarts."
+        },
+        "items": [
+          {
+            "id": "profile-docs.ac1",
+            "title": "README.md contains a \"## Profile settings\" section naming the /settings/profile route and the reusable ProfileForm component",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "profile-docs.ac2",
+            "title": "README.md shows the POST /api/profile request body fields and both response shapes, { profile } at status 200 and { errors } at status 400",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "profile-docs.ac3",
+            "title": "README.md states that the stored profile is a single in-process record that resets when the server restarts",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "profile-docs.ac4",
+            "title": "README.md preserves its Getting Started, Learn More and Deploy on Vercel sections byte-identical to fdf7000, with the new section appended after them",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          }
+        ]
+      },
+      {
+        "id": "gate-sweep",
+        "title": "Run lint, tests, and the production build and clear any regression",
+        "status": "pending",
+        "priority": "high",
+        "created": "2026-08-26T15:24:00Z",
+        "metadata": {
+          "difficulty": "simple",
+          "kind": "test",
+          "issueLabel": "aot-2",
+          "requiresInspection": false,
+          "inspectionDepth": "fast",
+          "files_scope": [
+            "app/lib/profile/validation.ts",
+            "app/lib/profile/repository.ts",
+            "app/lib/profile/service.ts",
+            "app/api/profile/route.ts",
+            "app/components/ProfileForm.tsx",
+            "app/settings/profile/page.tsx"
+          ],
+          "files_scope_confidence": "medium",
+          "verify_commands": [
+            "npm run lint",
+            "npm test",
+            "npm run build"
+          ],
+          "expected_outputs": [
+            "eslint exits 0 with 0 errors and only the pre-existing .claude/ fixture warning",
+            "vitest reports 16 test files with every test passing",
+            "next build completes the TypeScript step and its route table lists /settings/profile and /api/profile"
+          ],
+          "readiness": "sequential",
+          "traces": [
+            "NFR-1",
+            "NFR-2",
+            "NFR-3",
+            "NFR-4",
+            "FR-10",
+            "NFR-7"
+          ]
+        },
+        "narrative": {
+          "Action": "Run npm run lint, npm test and npm run build in that order and fix anything the earlier items introduced. Compare against the fdf7000 baseline recorded in .pan/context/codebase/concerns.md: 10 test files / 35 tests, lint 1 warning and 0 errors, build prerendering /, /_not-found, /about, /contact and /pricing. The single lint warning from .claude/skills/stitch-react-components/examples/gold-standard-card.tsx is pre-existing and belongs to AOT-1 — leave it alone and do not count it as introduced. This item runs last because it is the only one that judges the whole branch at once."
+        },
+        "items": [
+          {
+            "id": "gate-sweep.ac1",
+            "title": "npm run lint exits 0 reporting 0 errors, with no warning from any path outside .claude/",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "gate-sweep.ac2",
+            "title": "npm test passes every test across 16 test files, six more files than the 10 recorded at fdf7000",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "gate-sweep.ac3",
+            "title": "npm run build completes the TypeScript step and its route table lists /settings/profile and /api/profile alongside the five baseline routes",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "gate-sweep.ac4",
+            "title": "git diff main --name-only returns no path under app/about/, app/pricing/ or app/contact/, and does not return app/page.tsx",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          },
+          {
+            "id": "gate-sweep.ac5",
+            "title": "package.json preserves its dependencies and devDependencies byte-identical to fdf7000, proving the branch adds no dependency",
+            "status": "pending",
+            "metadata": {
+              "kind": "acceptance_criterion"
+            }
+          }
+        ]
+      }
+    ],
+    "edges": [
+      {
+        "from": "vitest-ts-glob",
+        "to": "profile-validation",
+        "type": "blocks"
+      },
+      {
+        "from": "vitest-ts-glob",
+        "to": "profile-repository",
+        "type": "blocks"
+      },
+      {
+        "from": "vitest-ts-glob",
+        "to": "profile-service",
+        "type": "blocks"
+      },
+      {
+        "from": "vitest-ts-glob",
+        "to": "profile-api-route",
+        "type": "blocks"
+      },
+      {
+        "from": "profile-validation",
+        "to": "profile-repository",
+        "type": "blocks"
+      },
+      {
+        "from": "profile-validation",
+        "to": "profile-service",
+        "type": "blocks"
+      },
+      {
+        "from": "profile-validation",
+        "to": "profile-form",
+        "type": "blocks"
+      },
+      {
+        "from": "profile-repository",
+        "to": "profile-service",
+        "type": "blocks"
+      },
+      {
+        "from": "profile-service",
+        "to": "profile-api-route",
+        "type": "blocks"
+      },
+      {
+        "from": "profile-api-route",
+        "to": "profile-form",
+        "type": "informs"
+      },
+      {
+        "from": "profile-form",
+        "to": "profile-settings-page",
+        "type": "blocks"
+      },
+      {
+        "from": "profile-settings-page",
+        "to": "nav-profile-link",
+        "type": "blocks"
+      },
+      {
+        "from": "profile-api-route",
+        "to": "profile-docs",
+        "type": "informs"
+      },
+      {
+        "from": "profile-settings-page",
+        "to": "profile-docs",
+        "type": "informs"
+      },
+      {
+        "from": "nav-profile-link",
+        "to": "gate-sweep",
+        "type": "blocks"
+      },
+      {
+        "from": "profile-docs",
+        "to": "gate-sweep",
+        "type": "blocks"
+      },
+      {
+        "from": "profile-validation",
+        "to": "gate-sweep",
+        "type": "blocks"
+      },
+      {
+        "from": "profile-repository",
+        "to": "gate-sweep",
+        "type": "blocks"
+      },
+      {
+        "from": "profile-service",
+        "to": "gate-sweep",
+        "type": "blocks"
+      },
+      {
+        "from": "profile-api-route",
+        "to": "gate-sweep",
+        "type": "blocks"
+      },
+      {
+        "from": "profile-form",
+        "to": "gate-sweep",
+        "type": "blocks"
+      },
+      {
+        "from": "profile-settings-page",
+        "to": "gate-sweep",
+        "type": "blocks"
+      }
+    ],
+    "metadata": {
+      "sizeJustification": "17 files, under the 25-file limit. The 14-subsystem count is an artifact of the heuristic: it derives a subsystem from a path's first two segments, and this repo keeps every test in one flat __tests__/ directory, so each of the seven test files counts as its own subsystem. The real subsystems are four — app/lib/profile, app/api/profile, app/components, app/settings/profile — plus __tests__ and two root files (vitest.config.mts, README.md). The slices are also genuinely inseparable as sibling issues: the form, the route handler and the page all import the same validation module, and the nav link would point at a 404 until the page ships, so splitting them across issues would land broken intermediate states on main.",
+      "canonicalFilename": "2026-08-26-AOT-2-add-user-profile-settings-with-validation.xbrief.json",
+      "promotionIntent": "automatic"
+    }
+  },
+  "status": "proposed"
+}
