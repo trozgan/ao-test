@@ -1,5 +1,5 @@
 import Nav from "@/app/components/Nav";
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import { usePathname } from "next/navigation";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
@@ -29,6 +29,29 @@ describe("Nav", () => {
       "href",
       "/pricing",
     );
+  });
+
+  test("renders exactly three nav links, plus the brand link", () => {
+    render(<Nav />);
+
+    // /contact is deliberately kept out of Nav. This exact count is what
+    // enforces that decision - adding a fourth link here fails the test.
+    const navLinks = within(screen.getByRole("navigation")).getAllByRole(
+      "link",
+    );
+    expect(navLinks.map((link) => link.textContent)).toEqual([
+      "Home",
+      "About",
+      "Pricing",
+    ]);
+
+    // The brand anchor also points at "/" but sits outside the nav landmark,
+    // so the document total is one higher than the nav count.
+    expect(screen.getByRole("link", { name: "Northwind" })).toHaveAttribute(
+      "href",
+      "/",
+    );
+    expect(screen.getAllByRole("link")).toHaveLength(4);
   });
 
   test.each([
