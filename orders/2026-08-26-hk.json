@@ -1,0 +1,12 @@
+{
+  "id": "2026-08-26-hk",
+  "name": "hk",
+  "status": "draft",
+  "settings": {
+    "laneAConcurrency": 1,
+    "posture": "open"
+  },
+  "items": [],
+  "createdAt": "2026-08-26T15:07:52.017Z",
+  "updatedAt": "2026-08-26T15:07:52.017Z"
+}
