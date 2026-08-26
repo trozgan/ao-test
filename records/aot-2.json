@@ -3,7 +3,7 @@
   "schemaVersion": 2,
   "feedback": [],
   "created": "2026-08-26T15:50:56.865Z",
-  "updated": "2026-08-26T16:05:00.951Z",
+  "updated": "2026-08-26T16:05:04.802Z",
   "pipeline": {
     "issueId": "AOT-2",
     "reviewStatus": "pending",
@@ -200,5 +200,61 @@
     "gate-sweep.ac3": "completed",
     "gate-sweep.ac4": "completed",
     "gate-sweep.ac5": "completed"
+  },
+  "scopeDrift": {
+    "outsideDeclaredScope": [
+      ".gitignore",
+      ".pan/context/codebase/architecture.md",
+      ".pan/context/codebase/concerns.md",
+      ".pan/context/codebase/conventions.md",
+      ".pan/context/codebase/stack.md",
+      ".pan/records/aot-2.json"
+    ],
+    "declaredScopeUntouched": [],
+    "declaredScope": [
+      "README.md",
+      "__tests__/Nav.test.tsx",
+      "__tests__/ProfileForm.test.tsx",
+      "__tests__/ProfileSettingsPage.test.tsx",
+      "__tests__/pageLandmarks.test.tsx",
+      "__tests__/profileApiRoute.test.ts",
+      "__tests__/profileRepository.test.ts",
+      "__tests__/profileService.test.ts",
+      "__tests__/profileValidation.test.ts",
+      "app/api/profile/route.ts",
+      "app/components/Nav.tsx",
+      "app/components/ProfileForm.tsx",
+      "app/lib/profile/repository.ts",
+      "app/lib/profile/service.ts",
+      "app/lib/profile/validation.ts",
+      "app/settings/profile/page.tsx",
+      "vitest.config.mts"
+    ],
+    "actualChangedFiles": [
+      ".gitignore",
+      ".pan/context/codebase/architecture.md",
+      ".pan/context/codebase/concerns.md",
+      ".pan/context/codebase/conventions.md",
+      ".pan/context/codebase/stack.md",
+      ".pan/records/aot-2.json",
+      "README.md",
+      "__tests__/Nav.test.tsx",
+      "__tests__/ProfileForm.test.tsx",
+      "__tests__/ProfileSettingsPage.test.tsx",
+      "__tests__/pageLandmarks.test.tsx",
+      "__tests__/profileApiRoute.test.ts",
+      "__tests__/profileRepository.test.ts",
+      "__tests__/profileService.test.ts",
+      "__tests__/profileValidation.test.ts",
+      "app/api/profile/route.ts",
+      "app/components/Nav.tsx",
+      "app/components/ProfileForm.tsx",
+      "app/lib/profile/repository.ts",
+      "app/lib/profile/service.ts",
+      "app/lib/profile/validation.ts",
+      "app/settings/profile/page.tsx",
+      "vitest.config.mts"
+    ],
+    "recordedAt": "2026-08-26T16:05:04.801Z"
   }
 }
