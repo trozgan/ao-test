@@ -1,4 +1,5 @@
 import About from "@/app/about/page";
+import Contact from "@/app/contact/page";
 import Home from "@/app/page";
 import Pricing from "@/app/pricing/page";
 import { render, screen } from "@testing-library/react";
@@ -15,6 +16,7 @@ const pages = [
   ["Home", Home],
   ["Pricing", Pricing],
   ["About", About],
+  ["Contact", Contact],
 ] as const;
 
 describe.each(pages)("%s page landmarks", (_name, Page) => {
