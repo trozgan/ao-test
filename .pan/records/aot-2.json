@@ -2,7 +2,7 @@
   "issueId": "AOT-2",
   "schemaVersion": 2,
   "created": "2026-08-26T15:20:17.624Z",
-  "updated": "2026-08-26T15:32:40.451Z",
+  "updated": "2026-08-26T15:43:19.220Z",
   "pipeline": {
     "issueId": "AOT-2",
     "reviewStatus": "pending",
@@ -29,6 +29,11 @@
       "reason": "resume",
       "agentModel": "claude-opus-5",
       "timestamp": "2026-08-26T15:32:40.450Z"
+    },
+    {
+      "reason": "resume",
+      "agentModel": "claude-opus-5",
+      "timestamp": "2026-08-26T15:43:19.220Z"
     }
   ],
   "harness": "claude-code",
