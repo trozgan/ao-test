@@ -101,7 +101,7 @@
     "recordedAt": "2026-08-26T16:05:04.801Z"
   },
   "created": "2026-08-26T15:50:56.865Z",
-  "updated": "2026-08-26T16:07:33.495Z",
+  "updated": "2026-08-26T16:07:43.245Z",
   "pipeline": {
     "issueId": "AOT-2",
     "reviewStatus": "reviewing",
@@ -195,7 +195,7 @@
       },
       "costAtCloseOut": {
         "usd": 4.105021,
-        "pricingAsOf": "2026-08-26T16:07:33.494Z"
+        "pricingAsOf": "2026-08-26T16:07:43.237Z"
       }
     },
     "merges": [
