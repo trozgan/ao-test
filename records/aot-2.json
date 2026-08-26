@@ -111,16 +111,16 @@
     "recordedAt": "2026-08-26T16:05:04.801Z"
   },
   "created": "2026-08-26T15:50:56.865Z",
-  "updated": "2026-08-26T16:06:27.584Z",
+  "updated": "2026-08-26T16:06:39.267Z",
   "pipeline": {
     "issueId": "AOT-2",
     "reviewStatus": "pending",
     "testStatus": "pending",
-    "verificationStatus": "failed",
+    "verificationStatus": "skipped",
     "mergeStatus": "pending",
     "releaseStatus": "pending",
     "readyForMerge": false,
-    "updatedAt": "2026-08-26T16:06:27.578Z",
+    "updatedAt": "2026-08-26T16:06:39.242Z",
     "reviewNotes": "Verification failed at test — fix and resubmit",
     "verificationNotes": "Verification FAILED at test (4022ms).\n\nFull gate output: /Users/sipkovszkirobert/Projects/ao-test/workspaces/feature-aot-2/.overdeck/verification-latest.json",
     "prUrl": "https://github.com/trozgan/ao-test/pull/3",
@@ -187,24 +187,24 @@
       "byStage": {
         "work": {
           "anthropic/claude-sonnet-5": {
-            "input": 182,
-            "output": 25402,
-            "cacheRead": 12852697,
-            "cacheWrite": 320362
+            "input": 184,
+            "output": 25644,
+            "cacheRead": 13026041,
+            "cacheWrite": 321024
           }
         }
       },
       "totals": {
         "anthropic/claude-sonnet-5": {
-          "input": 182,
-          "output": 25402,
-          "cacheRead": 12852697,
-          "cacheWrite": 320362
+          "input": 184,
+          "output": 25644,
+          "cacheRead": 13026041,
+          "cacheWrite": 321024
         }
       },
       "costAtCloseOut": {
-        "usd": 3.625836,
-        "pricingAsOf": "2026-08-26T16:06:27.580Z"
+        "usd": 3.664584,
+        "pricingAsOf": "2026-08-26T16:06:39.262Z"
       }
     },
     "merges": [
