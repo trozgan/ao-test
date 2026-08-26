@@ -22,7 +22,7 @@ export default function Nav() {
         >
           Northwind
         </Link>
-        <nav className="flex flex-wrap gap-x-6 gap-y-1 text-sm font-medium">
+        <nav className="flex flex-wrap gap-x-6 gap-y-0 text-sm font-medium">
           {links.map(({ href, label }) => {
             const active = pathname === href;
             return (
@@ -32,8 +32,8 @@ export default function Nav() {
                 aria-current={active ? "page" : undefined}
                 className={
                   active
-                    ? "text-foreground"
-                    : "text-foreground/70 transition-colors hover:text-foreground"
+                    ? "flex min-h-11 items-center text-foreground underline underline-offset-4"
+                    : "flex min-h-11 items-center text-foreground/70 transition-colors hover:text-foreground"
                 }
               >
                 {label}

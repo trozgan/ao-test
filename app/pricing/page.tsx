@@ -71,7 +71,7 @@ export default function Pricing() {
           <Card
             key={tier.name}
             className={`flex h-full flex-col ${
-              tier.featured ? "ring-2 ring-foreground" : ""
+              tier.featured ? "inset-ring-2 inset-ring-foreground" : ""
             }`}
           >
             <div className="flex items-center justify-between gap-3">
