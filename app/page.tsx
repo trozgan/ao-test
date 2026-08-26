@@ -24,7 +24,7 @@ export default function Home() {
         <h1 className="text-4xl font-semibold leading-tight tracking-tight sm:text-5xl">
           Ship the work, not the status updates
         </h1>
-        <p className="max-w-prose text-lg leading-8 text-zinc-600 dark:text-zinc-400">
+        <p className="max-w-prose text-lg leading-8 text-foreground/70">
           Northwind gives your team one place to plan, run, and report on work,
           so progress stays visible without another meeting.
         </p>
@@ -40,7 +40,7 @@ export default function Home() {
         {features.map(({ title, body }) => (
           <Card key={title}>
             <h2 className="text-lg font-semibold tracking-tight">{title}</h2>
-            <p className="mt-2 text-base leading-7 text-zinc-600 dark:text-zinc-400">
+            <p className="mt-2 text-base leading-7 text-foreground/70">
               {body}
             </p>
           </Card>
@@ -52,7 +52,7 @@ export default function Home() {
           <h2 className="text-2xl font-semibold tracking-tight">
             Start with your next project
           </h2>
-          <p className="max-w-prose text-base leading-7 text-zinc-600 dark:text-zinc-400">
+          <p className="max-w-prose text-base leading-7 text-foreground/70">
             Pick a plan and invite your team in a few minutes.
           </p>
         </div>

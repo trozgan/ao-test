@@ -61,7 +61,7 @@ export default function Pricing() {
       <h1 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
         Pricing
       </h1>
-      <p className="mt-4 max-w-prose text-lg leading-8 text-zinc-600 dark:text-zinc-400">
+      <p className="mt-4 max-w-prose text-lg leading-8 text-foreground/70">
         Simple plans that scale with your team. Switch or cancel whenever you
         like.
       </p>
@@ -90,17 +90,17 @@ export default function Pricing() {
                 {tier.price}
               </span>
               {tier.period && (
-                <span className="text-sm text-zinc-600 dark:text-zinc-400">
+                <span className="text-sm text-foreground/70">
                   {tier.period}
                 </span>
               )}
             </p>
 
-            <p className="mt-3 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+            <p className="mt-3 text-sm leading-6 text-foreground/70">
               {tier.description}
             </p>
 
-            <ul className="mt-6 mb-8 flex flex-col gap-2 text-sm leading-6 text-zinc-600 dark:text-zinc-400">
+            <ul className="mt-6 mb-8 flex flex-col gap-2 text-sm leading-6 text-foreground/70">
               {tier.features.map((feature) => (
                 <li key={feature} className="flex gap-2">
                   <span aria-hidden="true" className="text-foreground">
