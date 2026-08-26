@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "agentId": "agent-aot-2-review",
+  "issueId": "AOT-2",
+  "projectKey": "ao-test",
+  "role": "review",
+  "origin": {
+    "machineId": "Sipkovszki-MacBook-Pro-2.local",
+    "overdeckHome": "/Users/sipkovszkirobert/.overdeck"
+  },
+  "launch": {
+    "harness": "claude-code",
+    "model": "claude-opus-5",
+    "workspace": "/Users/sipkovszkirobert/Projects/ao-test/workspaces/feature-aot-2",
+    "branch": null
+  },
+  "sessions": [
+    {
+      "id": "af8cb435-9c90-4e7c-af8a-06361c6559f0",
+      "startedAt": "2026-08-26T16:06:41.953Z",
+      "reason": "spawn"
+    }
+  ],
+  "lifecycle": [
+    {
+      "at": "2026-08-26T16:06:41.953Z",
+      "event": "spawned"
+    }
+  ],
+  "archiveRef": null,
+  "recovered": false
+}
