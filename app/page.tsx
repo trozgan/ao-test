@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Button from "./components/Button";
 
 export default function Home() {
   return (
@@ -62,6 +63,10 @@ export default function Home() {
           >
             Documentation
           </a>
+        </div>
+        <div className="flex flex-col gap-4 sm:flex-row">
+          <Button>Primary</Button>
+          <Button variant="secondary">Secondary</Button>
         </div>
       </main>
     </div>
