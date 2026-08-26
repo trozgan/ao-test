@@ -94,18 +94,19 @@
     "recordedAt": "2026-08-26T16:05:04.801Z"
   },
   "created": "2026-08-26T15:50:56.865Z",
-  "updated": "2026-08-26T16:05:18.601Z",
+  "updated": "2026-08-26T16:05:20.584Z",
   "pipeline": {
     "issueId": "AOT-2",
-    "reviewStatus": "failed",
+    "reviewStatus": "pending",
     "testStatus": "pending",
     "verificationStatus": "failed",
     "mergeStatus": "pending",
     "releaseStatus": "pending",
     "readyForMerge": false,
-    "updatedAt": "2026-08-26T16:05:15.593Z",
-    "reviewNotes": "Verification failed at typecheck",
+    "updatedAt": "2026-08-26T16:05:15.776Z",
+    "reviewNotes": "Verification failed at typecheck — fix and resubmit",
     "prUrl": "https://github.com/trozgan/ao-test/pull/3",
+    "reviewRequestedAt": "2026-08-26T16:05:08.138Z",
     "scopeDrift": {
       "outsideDeclaredScope": [
         ".gitignore",
@@ -168,24 +169,24 @@
       "byStage": {
         "work": {
           "anthropic/claude-sonnet-5": {
-            "input": 156,
-            "output": 22592,
-            "cacheRead": 10783101,
-            "cacheWrite": 183931
+            "input": 160,
+            "output": 22998,
+            "cacheRead": 11108738,
+            "cacheWrite": 184415
           }
         }
       },
       "totals": {
         "anthropic/claude-sonnet-5": {
-          "input": 156,
-          "output": 22592,
-          "cacheRead": 10783101,
-          "cacheWrite": 183931
+          "input": 160,
+          "output": 22998,
+          "cacheRead": 11108738,
+          "cacheWrite": 184415
         }
       },
       "costAtCloseOut": {
-        "usd": 2.842686,
-        "pricingAsOf": "2026-08-26T16:05:18.600Z"
+        "usd": 2.913092,
+        "pricingAsOf": "2026-08-26T16:05:20.583Z"
       }
     },
     "merges": [
